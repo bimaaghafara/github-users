@@ -1,6 +1,20 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
 import "./App.css";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { useFetch } from "./hooks/useFetch";
+import {
+  TextField,
+  Button,
+  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+  Typography,
+  Paper,
+  Avatar,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import StarIcon from "@mui/icons-material/Star";
 
 type User = {
   id: number;
@@ -26,39 +40,51 @@ type Repo = {
 
 type ReposRes = Repo[];
 
-const styles = {
-  userCard: {
-    border: "1px solid",
-    margin: "12px 0",
-    padding: "12px",
+const sx = {
+  pageContainer: {
+    maxWidth: 600,
+    mx: "auto",
+    my: 1,
+    minHeight: "calc(100vh - 16px)",
   },
-  userHeader: {
+  contentContainer: {
+    p: 2,
+  },
+  searchBar: {
     display: "flex",
-    justifyContent: "space-between",
-    cursor: "pointer",
+    gap: "8px",
+    mb: 2,
   },
-  arrow: (isExpanded: boolean): React.CSSProperties => ({
-    display: "inline-block",
-    transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-    transition: "transform 0.3s ease",
-  }),
   repoList: {
     maxHeight: "50vh",
     overflow: "auto",
-    marginTop: "6px",
+    my: 1,
   },
   repoCard: {
-    margin: "2px 0",
+    margin: "6px 0",
     padding: "12px",
     background: "#eee",
+    borderRadius: "8px",
+  },
+  repoName: {
+    display: "flex",
+    justifyContent: "space-between",
   },
   textInfo: {
     margin: "12px 0",
   },
-  appContainer: {},
-  searchBar: {
+  userSummary: {
+    background: "#f5f5f5",
+  },
+  userInfo: {
     display: "flex",
-    gap: "8px",
+    alignItems: "center",
+    gap: 1,
+  },
+  starCount: {
+    display: "flex",
+    alignItems: "center",
+    gap: 0.5,
   },
 };
 
@@ -73,32 +99,53 @@ const UserItem = ({ user }: UserItemProps) => {
     setUrl(
       isExpanded ? `https://api.github.com/users/${user.login}/repos` : ""
     );
-  }, [isExpanded]);
+  }, [isExpanded, user.login]);
 
   const renderContent = () => {
     if (reposFetch.isLoading)
-      return <div style={styles.textInfo}>Loading....</div>;
-    if (reposFetch.error) return <div style={styles.textInfo}>Error...</div>;
+      return (
+        <Box>
+          <CircularProgress size={20} />
+        </Box>
+      );
+
+    if (reposFetch.error)
+      return (
+        <Box sx={sx.textInfo}>
+          <Typography color="error">Error fetching repos.</Typography>
+        </Box>
+      );
+
     if (reposFetch.data?.length)
       return reposFetch.data.map((repo) => (
-        <div key={repo.id} style={styles.repoCard}>
-          <div>
-            {repo.name} ({repo.stargazers_count}*)
-          </div>
-          <div>{repo.description || "-"}</div>
-        </div>
+        <Box key={repo.id} sx={sx.repoCard}>
+          <Box sx={sx.repoName}>
+            <Typography fontWeight="bold">{repo.name}</Typography>
+            <Typography sx={sx.starCount}>
+              {repo.stargazers_count} <StarIcon fontSize="small" />
+            </Typography>
+          </Box>
+          <Typography variant="body2">
+            {repo.description || "No description."}
+          </Typography>
+        </Box>
       ));
-    return <div style={styles.textInfo}>This user has no repository.</div>;
+
+    return <Box sx={sx.textInfo}>This user has no repository.</Box>;
   };
 
   return (
-    <div key={user.id} style={styles.userCard}>
-      <div style={styles.userHeader} onClick={() => setIsExpanded(!isExpanded)}>
-        <div>{user.login}</div>
-        <div style={styles.arrow(isExpanded)}>V</div>
-      </div>
-      {isExpanded && <div style={styles.repoList}>{renderContent()}</div>}
-    </div>
+    <Accordion onChange={(_, isExpanded) => setIsExpanded(isExpanded)}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={sx.userSummary}>
+        <Box sx={sx.userInfo}>
+          <Avatar src={user.avatar_url} alt={user.login} />
+          <Typography>{user.login}</Typography>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box sx={sx.repoList}>{renderContent()}</Box>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
@@ -126,41 +173,53 @@ function App() {
 
   const renderContent = () => {
     if (!lastSearch) return null;
-    if (usersFetch.isLoading)
-      return <div style={styles.textInfo}>Loading....</div>;
-    if (usersFetch.error) return <div style={styles.textInfo}>Error...</div>;
+    if (usersFetch.isLoading) return <Box sx={sx.textInfo}>Loading....</Box>;
+    if (usersFetch.error) return <Box sx={sx.textInfo}>Error...</Box>;
     if (usersFetch.data?.items?.length)
       return (
         <>
-          <div style={styles.textInfo}>
+          <Box sx={sx.textInfo}>
             Showing results for <i>{lastSearch}</i>:
-          </div>
+          </Box>
           {usersFetch.data.items.map((user) => (
             <UserItem user={user} key={user.id} />
           ))}
         </>
       );
     return (
-      <div style={styles.textInfo}>
+      <Box sx={sx.textInfo}>
         No Results Found for <i>{lastSearch}</i>
-      </div>
+      </Box>
     );
   };
 
   return (
-    <div style={styles.appContainer}>
-      <div style={styles.searchBar}>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={handleKeyDownInputSearch}
-        />
-        <button onClick={handleClickSearch} disabled={!search}>
-          Search
-        </button>
-      </div>
-      {renderContent()}
-    </div>
+    <Paper elevation={3} sx={sx.pageContainer}>
+      <Box sx={sx.contentContainer}>
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          Github User Search
+        </Typography>
+        <Box sx={sx.searchBar}>
+          <TextField
+            placeholder="Type a username..."
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleKeyDownInputSearch}
+          />
+          <Button
+            variant="contained"
+            onClick={handleClickSearch}
+            disabled={!search}
+          >
+            Search
+          </Button>
+        </Box>
+        {renderContent()}
+      </Box>
+    </Paper>
   );
 }
 
