@@ -24,6 +24,8 @@ export const UserItem = ({ user }: UserItemProps) => {
   const reposFetch = useFetch<ReposRes>({ url });
 
   useEffect(() => {
+    // Fetch repositories when the accordion is expanded
+    // need to set empty when collapsed so it will refetch when expanded again
     setUrl(
       isExpanded ? `https://api.github.com/users/${user.login}/repos` : ""
     );

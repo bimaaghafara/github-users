@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type UseFetchProps<Data, Error> = {
   url: string;
@@ -38,6 +39,7 @@ export const useFetch = <Data, Error = unknown>(
         });
       })
       .catch((error) => {
+        toast.error(`Error: ${error?.message || "Something went wrong"}`);
         setState({
           isLoading: false,
           data: undefined,

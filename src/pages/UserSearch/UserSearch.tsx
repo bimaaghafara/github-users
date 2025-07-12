@@ -20,8 +20,10 @@ export const UserSearch = () => {
 
   const handleClickSearch = () => {
     if (search) {
+      // Fetch users when search tem is not empty
+      // Add timestamp to refetch on every button click
       setUrl(
-        `https://api.github.com/search/users?q=${search}&page=1&per_page=5`
+        `https://api.github.com/search/users?q=${search}&page=1&per_page=5&timestamp=${Date.now()}`
       );
     }
   };

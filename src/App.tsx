@@ -1,8 +1,14 @@
 import { UserSearch } from "./pages/UserSearch";
 import "./App.css";
+import { Toaster } from "sonner";
 
 function App() {
-  return <UserSearch />;
+  return (
+    <div>
+      <Toaster />
+      <UserSearch />
+    </div>
+  );
 }
 
 export default App;
