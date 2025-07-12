@@ -15,6 +15,7 @@ A React + TypeScript app to search Github users and view their public repositori
 - React
 - TypeScript
 - Material UI (MUI)
+- Soooner (Toast notifications)
 - Github REST API
 - Custom `useFetch` hook
 
