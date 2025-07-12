@@ -20,6 +20,7 @@ A React + TypeScript app to search Github users and view their public repositori
 
 ## 📁 Project Structure
 
+```
 src/
 ├── App.tsx # Root app entry point
 ├── pages/
@@ -31,6 +32,7 @@ src/
 ├── types/
 │ └── Github.ts # TypeScript types for Github API
 └── App.css # Global styles
+```
 
 ## ▶️ Getting Started
 
