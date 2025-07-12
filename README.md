@@ -1,69 +1,64 @@
-# React + TypeScript + Vite
+# Github User Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript app to search Github users and view their public repositories. Built using Material UI (MUI) for a clean UI and `fetch` API for data handling.
 
-Currently, two official plugins are available:
+## 🔍 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Search Github users by username
+- View avatar and username
+- Expand user to see their public repositories
+- Shows repo name, description, and star count
+- Responsive and minimal UI using MUI
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- TypeScript
+- Material UI (MUI)
+- Github REST API
+- Custom `useFetch` hook
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📁 Project Structure
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+src/
+├── App.tsx # Root app entry point
+├── pages/
+│ └── UserSearch.tsx # Main page (search + results)
+├── components/
+│ └── UserItem.tsx # Reusable user accordion component
+├── hooks/
+│ └── useFetch.ts # Reusable fetch hook
+├── types/
+│ └── Github.ts # TypeScript types for Github API
+└── App.css # Global styles
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ▶️ Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 1. Clone the Repo
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+git clone https://Github.com/your-username/Github-user-search.git
+cd Github-user-search
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 2. Install Dependencies
+
+npm install
+
+### 3. Run the App
+
+npm run dev
+
+The app will open at http://localhost:5173 (or similar, if using Vite).
+
+## 🔐 Note on API Usage
+
+This app uses Github's public API which has rate limits. If you're unauthenticated, the default limit is 60 requests/hour per IP.
+
+## 📸 Screenshot
+
+Add a screenshot here
+
+---
+
+## 📄 License
+
+MIT

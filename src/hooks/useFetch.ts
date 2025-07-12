@@ -31,7 +31,6 @@ export const useFetch = <Data, Error = unknown>(
         return res.json() as Promise<Data>;
       })
       .then((data) => {
-        console.log(data);
         setState({
           isLoading: false,
           data,
@@ -39,7 +38,6 @@ export const useFetch = <Data, Error = unknown>(
         });
       })
       .catch((error) => {
-        console.error(error);
         setState({
           isLoading: false,
           data: undefined,
