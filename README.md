@@ -2,6 +2,10 @@
 
 A React + TypeScript app to search Github users and view their public repositories. Built using Material UI (MUI) for a clean UI and `fetch` API for data handling.
 
+![demo](./public/demo.gif)
+
+**🔗 Live Demo:** [https://bimaaghafara.github.io/github-users/](https://bimaaghafara.github.io/github-users/)
+
 ## 🔍 Features
 
 - Search Github users by username
@@ -55,12 +59,6 @@ The app will open at http://localhost:5173 (or similar, if using Vite).
 ## 🔐 Note on API Usage
 
 This app uses Github's public API which has rate limits. If you're unauthenticated, the default limit is 60 requests/hour per IP.
-
-## 📸 Screenshot
-
-Add a screenshot here
-
----
 
 ## 📄 License
 
