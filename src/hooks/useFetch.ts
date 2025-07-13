@@ -16,13 +16,20 @@ export const useFetch = <Data, Error = unknown>(
   const { url, initialState } = props;
   const [state, setState] = useState(initialState);
 
+  const cleanUrl = (u: string) => {
+    // Remove timestamp to avoid cache issues
+    const cleanedURL = new URL(u);
+    cleanedURL.searchParams.delete("fe_timestamp");
+    return cleanedURL.toString();
+  };
+
   const handleFetch = () => {
     setState((prev) => ({
       isLoading: true,
       data: prev?.data,
       error: undefined,
     }));
-    fetch(url)
+    fetch(cleanUrl(url))
       .then(async (res) => {
         if (!res.ok) {
           // Response error from server (e.g. 404, 500)
